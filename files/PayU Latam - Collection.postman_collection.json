@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "d461afa7-a605-4322-bad7-7924f10ce54e",
+		"name": "PayU Latam - Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20953055"
+	},
+	"item": [
+		{
+			"name": "Colombia",
+			"item": [
+				{
+					"name": "Sandbox",
+					"item": [
+						{
+							"name": "Credit Card",
+							"item": [
+								{
+									"name": "One Step Payment",
+									"item": [
+										{
+											"name": "Payment Request",
+											"event": [
+												{
+													"listen": "prerequest",
+													"script": {
+														"exec": [
+															"/* Creation of a variable called reference code which stores the current date ",
+															"and it is concatenated with a String */",
+															"var referenceCode = \"PRODUCT_TEST_\" + (new Date()).toISOString();",
+															"pm.globals.set(\"reference_code\", referenceCode);",
+															"",
+															"/* Creation of a variable called sigString which use several global and environment variables ",
+															"to create the String which will be used to create the signature */",
+															"var sigString = pm.environment.get(\"api_key\") + '~' +",
+															"                pm.environment.get(\"merchant_id\") + '~' + ",
+															"                referenceCode + '~' + ",
+															"                pm.globals.get(\"tx_value_co\") + '~' + ",
+															"                pm.globals.get(\"currency_co\");",
+															"",
+															"// Print in the console the value of the sigString variable                ",
+															"console.log(sigString);",
+															"",
+															"/* Creation of a variable called signature which implements hash function (MD5) to be used ",
+															"with the variable sigString to create the signature of the payment request */",
+															"var signature = CryptoJS.MD5(sigString).toString();",
+															"",
+															"// Set the value of the signature variable to the global variable called signature",
+															"pm.globals.set(\"signature\", signature);"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"protocolProfileBehavior": {
+												"disabledSystemHeaders": {}
+											},
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n   \"language\": \"es\",\r\n   \"command\": \"SUBMIT_TRANSACTION\",\r\n   \"merchant\": {\r\n      \"apiKey\": \"4Vj8eK4rloUd272L48hsrarnUA\",\r\n      \"apiLogin\": \"pRRXKOl8ikMmt9u\"\r\n   },\r\n   \"transaction\": {\r\n      \"order\": {\r\n         \"accountId\": \"{{account_co}}\",\r\n         \"referenceCode\": \"{{reference_code}}\",\r\n         \"description\": \"Payment test description\",\r\n         \"language\": \"es\",\r\n         \"signature\": \"{{signature}}\",\r\n         \"notifyUrl\": \"{{confirmation_page}}\",\r\n         \"additionalValues\": {\r\n            \"TX_VALUE\": {\r\n               \"value\": {{tx_value_co}},\r\n               \"currency\": \"{{currency_co}}\"\r\n         },\r\n            \"TX_TAX\": {\r\n               \"value\": 0,\r\n               \"currency\": \"{{currency_co}}\"\r\n         },\r\n            \"TX_TAX_RETURN_BASE\": {\r\n               \"value\": 0,\r\n               \"currency\": \"{{currency_co}}\"\r\n         }\r\n         },\r\n         \"buyer\": {\r\n            \"merchantBuyerId\": \"1\",\r\n            \"fullName\": \"First name and second buyer name\",\r\n            \"emailAddress\": \"buyer_test@test.com\",\r\n            \"contactPhone\": \"7563126\",\r\n            \"dniNumber\": \"123456789\",\r\n            \"shippingAddress\": {\r\n               \"street1\": \"calle 100\",\r\n               \"street2\": \"5555487\",\r\n               \"city\": \"Medellin\",\r\n               \"state\": \"Antioquia\",\r\n               \"country\": \"CO\",\r\n               \"postalCode\": \"000000\",\r\n               \"phone\": \"7563126\"\r\n            }\r\n         },\r\n         \"shippingAddress\": {\r\n            \"street1\": \"calle 100\",\r\n            \"street2\": \"5555487\",\r\n            \"city\": \"Medellin\",\r\n            \"state\": \"Antioquia\",\r\n            \"country\": \"CO\",\r\n            \"postalCode\": \"0000000\",\r\n            \"phone\": \"7563126\"\r\n         }\r\n      },\r\n      \"payer\": {\r\n         \"merchantPayerId\": \"1\",\r\n         \"fullName\": \"First name and second payer name\",\r\n         \"emailAddress\": \"payer_test@test.com\",\r\n         \"contactPhone\": \"7563126\",\r\n         \"dniNumber\": \"5415668464654\",\r\n         \"billingAddress\": {\r\n            \"street1\": \"calle 93\",\r\n            \"street2\": \"125544\",\r\n            \"city\": \"Bogota\",\r\n            \"state\": \"Bogota DC\",\r\n            \"country\": \"CO\",\r\n            \"postalCode\": \"000000\",\r\n            \"phone\": \"7563126\"\r\n         }\r\n      },\r\n      \"creditCard\": {\r\n         \"number\": \"4037997623271984\",\r\n         \"securityCode\": \"321\",\r\n         \"expirationDate\": \"2030/12\",\r\n         \"name\": \"APPROVED\"\r\n      },\r\n      \"extraParameters\": {\r\n         \"INSTALLMENTS_NUMBER\": 1\r\n      },\r\n      \"type\": \"AUTHORIZATION_AND_CAPTURE\",\r\n      \"paymentMethod\": \"VISA\",\r\n      \"paymentCountry\": \"CO\",\r\n      \"deviceSessionId\": \"vghs6tvkcle931686k1900o6e1\",\r\n      \"ipAddress\": \"127.0.0.1\",\r\n      \"cookie\": \"pt1t38347bs6jc9ruv2ecpv7o2\",\r\n      \"userAgent\": \"Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0\"\r\n   },\r\n   \"test\": true\r\n}"
+												},
+												"url": {
+													"raw": "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi",
+													"protocol": "https",
+													"host": [
+														"sandbox",
+														"api",
+														"payulatam",
+														"com"
+													],
+													"path": [
+														"payments-api",
+														"4.0",
+														"service.cgi"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
