@@ -1,5 +1,5 @@
 import requests
-import json
+
 
 url = 'https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi'
 data = {

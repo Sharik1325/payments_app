@@ -24,7 +24,6 @@ def typecard(card_number):
 
 
 class Payment(models.Model):
-    print("Payment------>")
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     card_number = models.TextField(
@@ -36,7 +35,7 @@ class Payment(models.Model):
     card_type = models.TextField(blank=True)
     response_Payu = models.TextField(null=True)
 
-    def save(self, *args, **kwargs):  # pasa un numero variable de argumentos a una function
+    def save(self, *args, **kwargs):
         print('save----------->')
         self.response_Payu = answer()
         self.commission_value = (self.total_value * 0.03) + (self.total_value * 0.015) + (
@@ -47,6 +46,3 @@ class Payment(models.Model):
         self.card_number = self.card_number_temporal
         super().save(*args, **kwargs)
 
-        # En este caso, se está utilizando super() para acceder al método save() de la clase padre, y se están pasando los argumentos *args y **kwargs para asegurar que cualquier argumento adicional que se pase al método save() cuando se llame desde una instancia de la clase TuModelo se pase a la llamada al método save() de la clase padre.
-# La llamada al método save() de la clase padre es importante ya que este método se encarga de guardar los datos en la base de datos y si no se llama, los datos no se guardarán.
-# super().save(*args, **kwargs) se encarga de guardar los cambios realizados en la instancia de TuModelo en la base de datos.
